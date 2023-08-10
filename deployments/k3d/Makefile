@@ -33,7 +33,7 @@ load-workload-images: build-workload-images
 	$(foreach shim,$(SHIMS),k3d image load $(TEST_IMG_NAME_$(shim));)
 
 up: create-k3d load-workload-images
-	kubectl label nodes k3d-k3s-default-agent-0 spin-enabled=true slight-enabled=true wws-enabled=true
+	kubectl label nodes k3d-k3s-default-agent-0 spin-enabled=true slight-enabled=true wws-enabled=true lunatic-enabled=true
 	kubectl apply -f ./workload
 
 test:
