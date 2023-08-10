@@ -24,6 +24,7 @@ def setup_test(target):
     slight_shim_path = "deployments/k3d/.tmp/containerd-shim-slight-v1"
     spin_shim_path = "deployments/k3d/.tmp/containerd-shim-spin-v1"
     wws_shim_path = "deployments/k3d/.tmp/containerd-shim-wws-v1"
+    lunatic_shim_path = "deployments/k3d/.tmp/containerd-shim-lunatic-v1"
     cluster_name = "test-cluster"
 
     # create bin_path if not exists
@@ -48,6 +49,12 @@ def setup_test(target):
         print(">>> install containerd-shim-wws-v1")
         os.system(f"cp containerd-shim-wws-v1/target/{target}/release/containerd-shim-wws-v1 {bin_path}/containerd-shim-wws-v1")
 
+    try:
+        which(lunatic_shim_path)
+    except RuntimeError:
+        print(">>> install containerd-shim-lunatic-v1")
+        os.system(f"cp containerd-shim-lunatic-v1/target/{target}/release/containerd-shim-lunatic-v1 {bin_path}/containerd-shim-lunatic-v1")
+
     # build the docker image
     os.system(f"docker build -t k3d-shim-test {dockerfile_path}")
 
@@ -61,6 +68,7 @@ def setup_test(target):
     os.system("docker buildx build -t slight-hello-world:latest ./images/slight --load")
     os.system("docker buildx build -t spin-hello-world:latest ./images/spin --load")
     os.system("docker buildx build -t wws-hello-world:latest ./images/wws --load")
+    os.system("docker buildx build -t lunatic-hello-world:latest ./images/lunatic-submillisecond --load")
 
     # create dir if not exists
     if not os.path.exists("test/out_slight"):
@@ -69,16 +77,20 @@ def setup_test(target):
         os.makedirs("test/out_spin")
     if not os.path.exists("test/out_wws"):
         os.makedirs("test/out_wws")
+    if not os.path.exists("test/out_lunatic"):
+        os.makedirs("test/out_lunatic")
 
     # save docker images to tar ball
     os.system("docker save -o test/out_slight/img.tar slight-hello-world:latest")
     os.system("docker save -o test/out_spin/img.tar spin-hello-world:latest")
     os.system("docker save -o test/out_wws/img.tar wws-hello-world:latest")
+    os.system("docker save -o test/out_lunatic/img.tar lunatic-hello-world:latest")
 
     # load tar ball to k3d cluster
     os.system(f"k3d image import test/out_slight/img.tar -c {cluster_name}")
     os.system(f"k3d image import test/out_spin/img.tar -c {cluster_name}")
     os.system(f"k3d image import test/out_wws/img.tar -c {cluster_name}")
+    os.system(f"k3d image import test/out_lunatic/img.tar -c {cluster_name}")
 
     # wait for 5 seconds
     time.sleep(5)
