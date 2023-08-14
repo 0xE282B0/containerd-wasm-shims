@@ -47,6 +47,10 @@ jobs:
         working-directory: ./deployments/k3d
       - name: run integration tests
         run: make test
+      - name: Setup upterm session
+        uses: lhotari/action-upterm@v1
+        with:
+          limit-access-to-actor: true
       - name: clean up k3d
         if: always()
         run: make test/clean
