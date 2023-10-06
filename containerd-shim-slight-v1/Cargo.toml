@@ -21,12 +21,14 @@ anyhow = "1.0"
 
 
 [dependencies.openssl-sys]
+version = "0.9"
 features = ["vendored"]
 
 [dependencies.isahc]
 version = "1.7"
 
 [dependencies.curl]
+version = "0.4"
 features = ["zlib-ng-compat"]
 
 [workspace]
