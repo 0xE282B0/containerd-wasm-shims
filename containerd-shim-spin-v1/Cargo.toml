@@ -11,8 +11,10 @@ Containerd shim for running Spin workloads.
 """
 
 [dependencies]
+youki = { version = "0.2.0", git = "https://github.com/0xE282B0/youki" , branch = "libyouki-0.2.0", default-features=false, optional = true }
 containerd-shim = "0.5.0"
-containerd-shim-wasm = { git = "https://github.com/containerd/runwasi", rev = "4d212b968d24d42a27952e8b04979382b543a613", features = ["cgroupsv2"] }
+containerd-shim-wasm = { version = "0.2.1", git = "https://github.com/0xE282B0/runwasi" , branch = "expose-executor", features = ["cgroupsv2"] }
+#containerd-shim-wasm = { version = "0.2.1", path = "../../runwasi/crates/containerd-shim-wasm", features = ["cgroupsv2"] }
 log = "0.4"
 spin-trigger = { git = "https://github.com/fermyon/spin", tag = "v1.5.0" }
 spin-trigger-http = { git = "https://github.com/fermyon/spin", tag = "v1.5.0" }
@@ -26,5 +28,15 @@ serde = "1.0"
 serde_json = "1.0"
 url = "2.3"
 anyhow = "1.0"
+protobuf-codegen = "=3.2.0"
+
+[features]
+default = ["youki"]
+youki = ["dep:youki"]
 
 [workspace]
+
+[[bin]]
+name = "youki-spin"
+path = "src/youki.rs"
+required-features = ["youki"]
