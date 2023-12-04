@@ -7,7 +7,7 @@ use spin_loader::cache::Cache;
 use spin_loader::FilesMountStrategy;
 use spin_manifest::schema::v2::AppManifest;
 use spin_redis_engine::RedisTrigger;
-use trigger-sqs::SqsTrigger;
+use trigger_sqs::SqsTrigger;
 use spin_trigger::TriggerHooks;
 use spin_trigger::{loader, RuntimeConfig, TriggerExecutor, TriggerExecutorBuilder};
 use spin_trigger_http::HttpTrigger;
