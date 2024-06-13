@@ -44,9 +44,10 @@ jobs:
       - name: package release assets
         run: |
           mkdir _dist
-          cp containerd-shim-*-v1/target/${{ matrix.config.arch }}-unknown-linux-musl/release/containerd-shim-*-v1 _dist/
           cd _dist
-          tar czf containerd-wasm-shims-v1-${{ matrix.shims }}-${{ env.RUNNER_OS }}-${{ matrix.config.arch }}.tar.gz containerd-shim-*-v1
+          cp ../containerd-shim-*-v1/target/${{ matrix.config.arch }}-unknown-linux-musl/release/containerd-shim-*-v1 .
+          [ -f ../containerd-shim-*-v1/target/${{ matrix.config.arch }}-unknown-linux-musl/release/youki-${{ matrix.shims }} ] && cp ../containerd-shim-*-v1/target/${{ matrix.config.arch }}-unknown-linux-musl/release/youki-${{ matrix.shims }} .
+          tar czf containerd-wasm-shims-v1-${{ matrix.shims }}-${{ env.RUNNER_OS }}-${{ matrix.config.arch }}.tar.gz *
       - name: upload shim artifacts
         uses: actions/upload-artifact@v3
         with:
